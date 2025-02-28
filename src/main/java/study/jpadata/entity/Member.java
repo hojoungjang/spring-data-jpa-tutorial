@@ -53,6 +53,10 @@ public class Member {
         this.team = team;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public void changeTeam(Team team) {
         if (this.team != null) {
             this.team.getMembers().remove(this);

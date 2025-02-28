@@ -8,8 +8,10 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.query.Param;
 
+import jakarta.persistence.QueryHint;
 import study.jpadata.entity.Member;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
@@ -47,4 +49,13 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     @EntityGraph("Member.all")
     public List<Member> findNamedEntityGraphByName(String name);
+
+    @QueryHints(value = @QueryHint(name = "org.hibernate.readOnly", value = "true"))
+    public Member findReadOnlyByName(String name);
+
+    @QueryHints(
+        value = {@QueryHint(name = "org.hibernate.readOnly", value = "true")},
+        forCounting = true
+    )
+Page<Member> findByUsername(String name, Pageable pageable);
 }

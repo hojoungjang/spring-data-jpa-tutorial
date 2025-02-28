@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import study.jpadata.entity.Member;
 import study.jpadata.entity.Team;
@@ -29,6 +30,9 @@ public class MemberRepositoryTest {
     
     @Autowired
     private TeamRepository teamRepository;
+
+    @Autowired
+    private EntityManager em;
 
     @Test
     public void testMember() {
@@ -246,5 +250,17 @@ public class MemberRepositoryTest {
 
         assertEquals(2, findMembers.size());
         findMembers.forEach(m -> assertEquals(m.getTeam(), team2));
+    }
+
+    @Test
+    public void queryHint() throws Exception {
+        //given
+        memberRepository.save(new Member("member1", 10));
+        em.flush();
+        em.clear();
+        //when
+        Member member = memberRepository.findReadOnlyByName("member1");
+        member.setName("member2");
+        em.flush(); //Update Query 실행X
     }
 }
