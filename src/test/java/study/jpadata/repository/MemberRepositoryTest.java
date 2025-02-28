@@ -153,4 +153,20 @@ public class MemberRepositoryTest {
         assertEquals(20, findMemberDtoList.get(0).getAge());
         assertEquals("team1", findMemberDtoList.get(0).getTeamName());
     }
+
+    @Test
+    public void testFindByNames() {
+        List<Member> members = new ArrayList<>(Arrays.asList(
+            new Member("member1", 10),
+            new Member("member1", 13),
+            new Member("member2", 21),
+            new Member("member2", 16),
+            new Member("member3", 25)
+        ));
+        members.forEach(m -> memberRepository.save(m));
+        
+        List<Member> findMembers = memberRepository.findByNames(List.of("member2", "member3"));
+
+        assertEquals(3, findMembers.size());
+    }
 }
