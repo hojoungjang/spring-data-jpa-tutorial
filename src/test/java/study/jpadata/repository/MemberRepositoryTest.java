@@ -1,5 +1,6 @@
 package study.jpadata.repository;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -14,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import jakarta.transaction.Transactional;
 import study.jpadata.entity.Member;
+import study.jpadata.entity.Team;
 
 @SpringBootTest
 @Transactional
@@ -21,6 +23,9 @@ public class MemberRepositoryTest {
     
     @Autowired
     private MemberRepository memberRepository;
+    
+    @Autowired
+    private TeamRepository teamRepository;
 
     @Test
     public void testMember() {
@@ -112,5 +117,40 @@ public class MemberRepositoryTest {
         assertEquals(1, findMembers.size());
         assertEquals("member2", findMembers.get(0).getName());
         assertEquals(21, findMembers.get(0).getAge());
+    }
+
+    @Test
+    public void testFindUsernameList() {
+        List<Member> members = new ArrayList<>(Arrays.asList(
+            new Member("member1", 10),
+            new Member("member2", 13),
+            new Member("member3", 21),
+            new Member("member4", 16),
+            new Member("member5", 25)
+        ));
+        members.forEach(m -> memberRepository.save(m));
+
+        List<String> memberUsernames = memberRepository.findUsernameList();
+
+        assertArrayEquals(
+            new String[]{"member1", "member2", "member3", "member4", "member5"},
+            memberUsernames.toArray()
+        );
+    }
+
+    @Test
+    public void testFindMemberDtoList() {
+        Team team = new Team("team1");
+        teamRepository.save(team);
+
+        Member member = new Member("member1", 20, team);
+        memberRepository.save(member);
+
+        List<MemberDto> findMemberDtoList = memberRepository.findMemberDtoList();
+
+        assertEquals(1, findMemberDtoList.size());
+        assertEquals("member1", findMemberDtoList.get(0).getUsername());
+        assertEquals(20, findMemberDtoList.get(0).getAge());
+        assertEquals("team1", findMemberDtoList.get(0).getTeamName());
     }
 }

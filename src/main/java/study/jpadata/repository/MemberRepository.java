@@ -20,4 +20,12 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
         @Param("username") String username,
         @Param("age") int age
     );
+
+    // 값 조회
+    @Query("select m.name from Member m")
+    public List<String> findUsernameList();
+
+    // DTO 조회
+    @Query("select new study.jpadata.repository.MemberDto(m.id, m.name, m.age, t.name) from Member m join m.team t")
+    public List<MemberDto> findMemberDtoList();
 }
