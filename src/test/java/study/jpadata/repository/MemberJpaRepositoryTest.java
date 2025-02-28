@@ -82,4 +82,20 @@ public class MemberJpaRepositoryTest {
             Assertions.assertTrue(m.getAge() > 5);
         });
     }
+
+    @Test
+    public void testFindByUsername() {
+        List<Member> members = new ArrayList<>(Arrays.asList(
+            new Member("member1", 10),
+            new Member("member2", 13),
+            new Member("member3", 21)
+        ));
+        members.forEach(m -> memberJpaRepository.save(m));
+
+        List<Member> findMembers = memberJpaRepository.findByUsername("member2");
+
+        Assertions.assertEquals(1, findMembers.size());
+        Assertions.assertEquals("member2", findMembers.get(0).getName());
+        Assertions.assertEquals(13, findMembers.get(0).getAge());
+    }
 }

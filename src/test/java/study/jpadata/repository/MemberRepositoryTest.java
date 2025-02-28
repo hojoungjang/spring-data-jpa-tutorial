@@ -79,4 +79,20 @@ public class MemberRepositoryTest {
             assertTrue(m.getAge() > 5);
         });
     }
+
+    @Test
+    public void testFindByUsername() {
+        List<Member> members = new ArrayList<>(Arrays.asList(
+            new Member("member1", 10),
+            new Member("member2", 13),
+            new Member("member3", 21)
+        ));
+        members.forEach(m -> memberRepository.save(m));
+
+        List<Member> findMembers = memberRepository.findByUsername("member2");
+
+        assertEquals(1, findMembers.size());
+        assertEquals("member2", findMembers.get(0).getName());
+        assertEquals(13, findMembers.get(0).getAge());
+    }
 }
