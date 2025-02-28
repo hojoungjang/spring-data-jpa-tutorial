@@ -1,5 +1,10 @@
 package study.jpadata.repository;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
@@ -54,5 +59,24 @@ public class MemberRepositoryTest {
         memberRepository.delete(member2);
         long deletedCount = memberRepository.count();
         Assertions.assertThat(deletedCount).isEqualTo(0);
+    }
+
+    @Test
+    public void testFindByUsernameAndAgeGreaterThan() {
+        List<Member> members = new ArrayList<>(Arrays.asList(
+            new Member("member1", 10),
+            new Member("member1", 13),
+            new Member("member2", 21),
+            new Member("member2", 16),
+            new Member("member3", 25)
+        ));
+        members.forEach(m -> memberRepository.save(m));
+
+        List<Member> findMembers1 = memberRepository.findByNameAndAgeGreaterThan("member1", 5);
+        assertEquals(findMembers1.size(), 2);
+        findMembers1.forEach(m -> {
+            assertEquals(m.getName(), "member1");
+            assertTrue(m.getAge() > 5);
+        });
     }
 }
