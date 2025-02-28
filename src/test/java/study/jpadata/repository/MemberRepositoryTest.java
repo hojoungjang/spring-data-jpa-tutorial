@@ -193,4 +193,18 @@ public class MemberRepositoryTest {
         assertTrue(pagedMembers.isFirst());
         assertTrue(pagedMembers.hasNext());
     }
+
+    @Test
+    public void testBulkIncrAge() {
+        //given
+        memberRepository.save(new Member("member1", 10));
+        memberRepository.save(new Member("member2", 19));
+        memberRepository.save(new Member("member3", 20));
+        memberRepository.save(new Member("member4", 21));
+        memberRepository.save(new Member("member5", 40));
+
+        int resultCount = memberRepository.bulkIncrAge(20);
+
+        assertEquals(3, resultCount);
+    }
 }
