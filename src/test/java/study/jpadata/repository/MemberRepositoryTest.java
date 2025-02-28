@@ -95,4 +95,22 @@ public class MemberRepositoryTest {
         assertEquals("member2", findMembers.get(0).getName());
         assertEquals(13, findMembers.get(0).getAge());
     }
+
+    @Test
+    public void testCustomQuery() {
+        List<Member> members = new ArrayList<>(Arrays.asList(
+            new Member("member1", 10),
+            new Member("member1", 13),
+            new Member("member2", 21),
+            new Member("member2", 16),
+            new Member("member3", 25)
+        ));
+        members.forEach(m -> memberRepository.save(m));
+
+        List<Member> findMembers = memberRepository.findUserCustomQuery("member2", 20);
+
+        assertEquals(1, findMembers.size());
+        assertEquals("member2", findMembers.get(0).getName());
+        assertEquals(21, findMembers.get(0).getAge());
+    }
 }
