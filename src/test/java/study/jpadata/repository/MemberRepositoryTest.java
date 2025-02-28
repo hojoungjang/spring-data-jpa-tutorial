@@ -207,4 +207,44 @@ public class MemberRepositoryTest {
 
         assertEquals(3, resultCount);
     }
+
+    @Test
+    public void testFindEntityGraphByName() {
+        Team team1 = new Team("team1");
+        Team team2 = new Team("team2");
+        teamRepository.save(team1);
+        teamRepository.save(team2);
+        
+        //given
+        memberRepository.save(new Member("member1", 10, team1));
+        memberRepository.save(new Member("member1", 19, team1));
+        memberRepository.save(new Member("member2", 20, team2));
+        memberRepository.save(new Member("member2", 21, team2));
+        memberRepository.save(new Member("member3", 40, team2));
+
+        List<Member> findMembers = memberRepository.findEntityGraphByName("member1");
+
+        assertEquals(2, findMembers.size());
+        findMembers.forEach(m -> assertEquals(m.getTeam(), team1));
+    }
+
+    @Test
+    public void testFindNamedEntityGraphByName() {
+        Team team1 = new Team("team1");
+        Team team2 = new Team("team2");
+        teamRepository.save(team1);
+        teamRepository.save(team2);
+        
+        //given
+        memberRepository.save(new Member("member1", 10, team1));
+        memberRepository.save(new Member("member1", 19, team1));
+        memberRepository.save(new Member("member2", 20, team2));
+        memberRepository.save(new Member("member2", 21, team2));
+        memberRepository.save(new Member("member3", 40, team2));
+
+        List<Member> findMembers = memberRepository.findNamedEntityGraphByName("member2");
+
+        assertEquals(2, findMembers.size());
+        findMembers.forEach(m -> assertEquals(m.getTeam(), team2));
+    }
 }

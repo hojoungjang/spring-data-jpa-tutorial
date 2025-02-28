@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -40,4 +41,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Modifying(clearAutomatically = true)
     @Query("update Member m set m.age = m.age + 1 where m.age >= :age")
     public int bulkIncrAge(@Param("age") int age);
+
+    @EntityGraph(attributePaths = {"team"})
+    public List<Member> findEntityGraphByName(String name);
+
+    @EntityGraph("Member.all")
+    public List<Member> findNamedEntityGraphByName(String name);
 }
