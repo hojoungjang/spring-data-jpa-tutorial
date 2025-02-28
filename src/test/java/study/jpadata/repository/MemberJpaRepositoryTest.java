@@ -118,4 +118,18 @@ public class MemberJpaRepositoryTest {
         Assertions.assertEquals(3, findMembers.size());
         Assertions.assertEquals(5, totalCount);
     }
+
+    @Test
+    public void testBulkAgeIncr() {
+        //given
+        memberJpaRepository.save(new Member("member1", 10));
+        memberJpaRepository.save(new Member("member2", 19));
+        memberJpaRepository.save(new Member("member3", 20));
+        memberJpaRepository.save(new Member("member4", 21));
+        memberJpaRepository.save(new Member("member5", 40));
+
+        int resultCount = memberJpaRepository.bulkAgeIncr(20);
+
+        Assertions.assertEquals(3, resultCount);
+    }
 }
