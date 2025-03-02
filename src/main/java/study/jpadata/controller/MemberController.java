@@ -5,6 +5,9 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import study.jpadata.entity.Member;
 import study.jpadata.repository.MemberRepository;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -24,5 +27,11 @@ public class MemberController {
     @GetMapping("/api/v2/members/{id}")
     public String getMethodName(@PathVariable("id") Member member) {
         return member.getName();
+    }
+
+    @GetMapping("/api/v1/members")
+    public Page<Member> list(Pageable pageable) {
+        Page<Member> members = memberRepository.findAll(pageable);
+        return members;
     }
 }
