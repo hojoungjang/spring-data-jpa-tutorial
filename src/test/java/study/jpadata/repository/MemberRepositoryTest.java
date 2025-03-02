@@ -263,4 +263,15 @@ public class MemberRepositoryTest {
         member.setName("member2");
         em.flush(); //Update Query 실행X
     }
+
+    @Test
+    public void findMemberCustom() throws Exception {
+        memberRepository.save(new Member("member1", 10));
+
+        List<Member> findMembers = memberRepository.findMemberCustom();
+
+        assertEquals(1, findMembers.size());
+        assertEquals("member1", findMembers.get(0).getName());
+        assertEquals(10, findMembers.get(0).getAge());
+    }
 }
