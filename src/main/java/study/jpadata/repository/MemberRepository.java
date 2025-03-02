@@ -14,7 +14,7 @@ import org.springframework.data.repository.query.Param;
 import jakarta.persistence.QueryHint;
 import study.jpadata.entity.Member;
 
-public interface MemberRepository extends JpaRepository<Member, Long> {
+public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom {
     
     public List<Member> findByNameAndAgeGreaterThan(String name, int age);
 
@@ -57,5 +57,5 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
         value = {@QueryHint(name = "org.hibernate.readOnly", value = "true")},
         forCounting = true
     )
-Page<Member> findByUsername(String name, Pageable pageable);
+    Page<Member> findByUsername(String name, Pageable pageable);
 }
