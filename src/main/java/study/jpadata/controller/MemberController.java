@@ -3,6 +3,7 @@ package study.jpadata.controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import study.jpadata.dto.MemberDto;
 import study.jpadata.entity.Member;
 import study.jpadata.repository.MemberRepository;
 
@@ -33,5 +34,12 @@ public class MemberController {
     public Page<Member> list(Pageable pageable) {
         Page<Member> members = memberRepository.findAll(pageable);
         return members;
+    }
+
+    @GetMapping("/api/v2/members")
+    public Page<MemberDto> listV2(Pageable pageable) {
+        Page<Member> members = memberRepository.findAll(pageable);
+        Page<MemberDto> membersDto = members.map(MemberDto::new);
+        return membersDto;
     }
 }
